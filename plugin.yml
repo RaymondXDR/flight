@@ -1,0 +1,13 @@
+name: Flight
+version: Release1
+main: com.reflexian.com.reflexian.com.Reflexian
+api-version: 1.16
+authors: [Raymond]
+description: Simple flight plugin
+website: Reflexian.com
+commands:
+  fly:
+    description: Allows you to fly
+    usage: /<command>
+    permission: fly.use
+    permission-message: "§cYou do not have permission to use this command!"
