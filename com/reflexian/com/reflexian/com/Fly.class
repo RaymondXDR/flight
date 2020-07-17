@@ -8,19 +8,34 @@ import org.bukkit.entity.Player;
 
 public class Fly implements CommandExecutor {
 
+    public com.reflexian.com.reflexian.com.Reflexian main;
+
+    public Fly(com.reflexian.com.reflexian.com.Reflexian main) {
+        this.main = main;
+    }
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
-
-            player.setAllowFlight(!player.getAllowFlight());
-            if (!player.getAllowFlight()) {
-                player.sendMessage(ChatColor.RED + "Your flight has been disabled.");
-                return true;
+            String permission = main.getConfig().getString("permission");
+            if (!player.hasPermission(permission)) {
+                String denied = main.getConfig().getString("no-permission-message");
+                //for(String denied : main.getConfig().getStringList("no-permission-message"))
+                player.sendMessage(ChatColor.RED + denied);
             } else {
-                player.sendMessage(ChatColor.GREEN + "Your flight has been enabled.");
-                return true;
+                player.setAllowFlight(!player.getAllowFlight());
+                if (!player.getAllowFlight()) {
+                    //for(String disabled : main.getConfig().getStringList("fly-disabled-message"))
+                    String disabled = main.getConfig().getString("fly-disabled-message");
+                    player.sendMessage(ChatColor.RED + disabled);
+                } else {
+                    //for(String enabled : main.getConfig().getStringList("fly-enabled-message"))
+                    String enabled = main.getConfig().getString("fly-enabled-message");
+                    player.sendMessage(ChatColor.GREEN + enabled);
+                }
             }
+            return true;
         }
         return true;
     }
