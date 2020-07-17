@@ -1,0 +1,27 @@
+package com.reflexian.com.reflexian.com;
+
+import org.bukkit.plugin.java.JavaPlugin;
+
+public final class Reflexian extends JavaPlugin {
+
+    @Override
+    public void onEnable() {
+        this.getCommand("fly").setExecutor(new Fly());
+        getLogger().info("--------------------------");
+        getLogger().info("Loading Flight Plugin");
+        getLogger().info("--------------------------");
+        getLogger().info("Loaded Flight Plugin");
+        getLogger().info("Made by Raymond#0001");
+        getLogger().info(" ");
+        getLogger().info("Problems? Contact me");
+        getLogger().info("on discord: Raymond#0001");
+        getLogger().info("--------------------------");
+
+
+    }
+
+    @Override
+    public void onDisable() {
+        // Plugin shutdown logic
+    }
+}
