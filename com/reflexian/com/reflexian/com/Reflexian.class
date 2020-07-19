@@ -7,16 +7,19 @@ import com.reflexian.com.reflexian.com.Fly;
 public final class Reflexian extends JavaPlugin {
 
     FileConfiguration config = getConfig();
+    public Object MetricsLite;
 
     @Override
     public void onEnable() {
+        int pluginId = 8238;
+        MetricsLite = new MetricsLite(this, pluginId);
         getCommand("fly").setExecutor(new Fly(this));
-        config.addDefault("permission", "fly.use");
-        config.addDefault("no-permission-message", "You do not have permission to use that command!");
-        config.addDefault("fly-enabled-message", "You have enabled flight mode!");
-        config.addDefault("fly-disabled-message", "You have disabled flight mode!");
-        config.options().copyDefaults(true);
-        saveConfig();
+        //config.addDefault("permission", "fly.use");
+        //config.addDefault("no-permission-message", "You do not have permission to use that command!");
+        //config.addDefault("fly-enabled-message", "You have enabled flight mode!");
+        //config.addDefault("fly-disabled-message", "You have disabled flight mode!");
+        //config.options().copyDefaults(true);
+        this.saveDefaultConfig();
         getLogger().info("--------------------------");
         getLogger().info("Loading Flight Plugin");
         getLogger().info("--------------------------");
@@ -26,6 +29,11 @@ public final class Reflexian extends JavaPlugin {
         getLogger().info("Problems? Contact me");
         getLogger().info("on discord: Raymond#0001");
         getLogger().info("--------------------------");
+        if (config.contains("permission-multiplayer")) {
+            getLogger().info("permission yes!");
+        } else {
+            getLogger().info("permission no!");
+        }
     }
 
     @Override
