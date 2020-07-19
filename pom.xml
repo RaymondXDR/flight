@@ -6,7 +6,7 @@
 
     <groupId>com.reflexian</groupId>
     <artifactId>SimpleFlight</artifactId>
-    <version>Release2</version>
+    <version>Release3</version>
     <packaging>jar</packaging>
 
     <name>SimpleFlight</name>
