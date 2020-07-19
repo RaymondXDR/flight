@@ -1,4 +1,4 @@
-name: Flight
+name: SimpleFlight
 version: ${project.version}
 main: com.reflexian.com.reflexian.com.Reflexian
 api-version: 1.16
