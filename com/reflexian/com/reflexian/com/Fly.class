@@ -1,5 +1,6 @@
 package com.reflexian.com.reflexian.com;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -15,28 +16,86 @@ public class Fly implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (sender instanceof Player) {
+    public boolean onCommand(CommandSender sender, Command command, String alias, String[] args) {
             Player player = (Player) sender;
-            String permission = main.getConfig().getString("permission");
-            if (!player.hasPermission(permission)) {
-                String denied = main.getConfig().getString("no-permission-message");
-                //for(String denied : main.getConfig().getStringList("no-permission-message"))
-                player.sendMessage(ChatColor.RED + denied);
-            } else {
-                player.setAllowFlight(!player.getAllowFlight());
-                if (!player.getAllowFlight()) {
-                    //for(String disabled : main.getConfig().getStringList("fly-disabled-message"))
-                    String disabled = main.getConfig().getString("fly-disabled-message");
-                    player.sendMessage(ChatColor.RED + disabled);
+            if (alias.equalsIgnoreCase("fly")) {
+                if (args.length == 0) {
+                    String permission = main.getConfig().getString("permission");
+                    if (!player.hasPermission(permission)) {
+                        String denied = main.getConfig().getString("no-permission-message");
+                        player.sendMessage(ChatColor.RED + denied);
+                    } else {
+                        player.setAllowFlight(!player.getAllowFlight());
+                        if (!player.getAllowFlight()) {
+                            String disabled = main.getConfig().getString("fly-disabled-message");
+                            player.sendMessage(ChatColor.RED + disabled);
+                            return true;
+                        } else {
+                            String enabled = main.getConfig().getString("fly-enabled-message");
+                            player.sendMessage(ChatColor.GREEN + enabled);
+                        }
+                        return true;
+                    }
                 } else {
-                    //for(String enabled : main.getConfig().getStringList("fly-enabled-message"))
-                    String enabled = main.getConfig().getString("fly-enabled-message");
-                    player.sendMessage(ChatColor.GREEN + enabled);
+                    if (args[0].equalsIgnoreCase("reload")) {
+                        String reloadpermission = main.getConfig().getString("reload-permission");
+                        if (!player.hasPermission(reloadpermission)) {
+                            String denied = main.getConfig().getString("no-permission-message");
+                            player.sendMessage(ChatColor.RED + denied);
+                            return true;
+                        } else {
+                            main.reloadConfig();
+                            player.sendMessage(ChatColor.GREEN + "You have successfully reloaded the configuration files!");
+                        }
+                        return true;
+                    }
+                    Player target = Bukkit.getPlayerExact(args[0]);
+                    if (target == null) {
+                        String denied = main.getConfig().getString("no-permission-message");
+                        String permission = main.getConfig().getString("permission");
+                        if (!player.hasPermission(permission)) {
+                            player.sendMessage(ChatColor.RED + denied);
+                            return true;
+                        } else {
+                            player.sendMessage(ChatColor.RED + "That is not a valid player or argument!");
+                        }
+                        return true;
+                    } else {
+                        String permission = main.getConfig().getString("permission");
+                        if (!player.hasPermission(permission)) {
+                            String denied = main.getConfig().getString("no-permission-message");
+                            player.sendMessage(ChatColor.RED + denied);
+                        } else {
+                            target.setAllowFlight(!target.getAllowFlight());
+                            if (!target.getAllowFlight()) {
+                                String disabledtarget = main.getConfig().getString("fly-disabled-for-target-message");
+                                String disabledtargetfly = main.getConfig().getString("fly-disabled-for-player-message");
+                                boolean toggled = main.getConfig().getBoolean("send-message");
+                                if (toggled = true){
+                                    target.sendMessage(ChatColor.RED + disabledtarget);
+                                    player.sendMessage(ChatColor.RED + disabledtargetfly + target.getDisplayName());
+                                } else {
+                                    player.sendMessage(ChatColor.RED + disabledtargetfly);
+                                }
+                                return true;
+                            } else {
+                                String enabledtarget = main.getConfig().getString("fly-enabled-for-target-message");
+                                String enabledtargetfly = main.getConfig().getString("fly-enabled-for-player-message");
+                                boolean toggled = main.getConfig().getBoolean("send-message");
+                                if (toggled = true) {
+                                    target.sendMessage(ChatColor.GREEN + enabledtarget);
+                                    player.sendMessage(ChatColor.GREEN + enabledtargetfly + target.getDisplayName());
+                                } else {
+                                    player.sendMessage(ChatColor.GREEN + enabledtargetfly);
+                                }
+                                return true;
+                            }
+                        }
+                    }
+                    return true;
                 }
+                return true;
             }
-            return true;
-        }
-        return true;
+        return false;
     }
 }
